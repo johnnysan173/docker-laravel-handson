@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Memo;
+use App\Models\App;
+use App\Models\Tag;
 
 class HomeController extends Controller
 {
@@ -44,13 +46,20 @@ class HomeController extends Controller
         // dd($data);
         // POSTされたデータをDB（memosテーブル）に挿入
         // MEMOモデルにDBへ保存する命令を出す
-
+        $exist_tag = Tag::where('name', $data['tag'])->where('user_id', $data['user_id'])->first();
+        // dd($exist_tag);
+        if($exist_tag != null){
+            $tag_id = $exist_tag['id'];
+        } else {
+            $tag_id = Tag::insertGetId(['name' => $data['tag'], 'user_id' => $data['user_id']]);
+        }
+        // dd($tag_id);
         //タグのIDが判明する
         // タグIDをmemosテーブルに入れてあげる
         $memo_id = Memo::insertGetId([
             'content' => $data['content'],
              'user_id' => $data['user_id'], 
-            //  'tag_id' => $tag_id,
+             'tag_id' => $tag_id,
              'status' => 1
         ]);
         
@@ -64,16 +73,17 @@ class HomeController extends Controller
         $memos = Memo::where('user_id', $user['id'])->where('status', 1)->orderBy('updated_at', 'DESC')->get();
         $memo = Memo::where('status', 1)->where('id', $id)->where('user_id', $user['id'])
           ->first();
-        //   dd($memo);
+        $tags = tag::where('user_id', $user['id'])->get();
+        // dd($tags);
         //取得したメモをViewに渡す
-        return view('edit',compact('user', 'memo', 'memos'));
+        return view('edit',compact('user', 'memo', 'memos', 'tags'));
     }
 
     public function update(Request $request, $id){
         $input = $request->all();
         // dd($input);
-        // $input = 
-        Memo::where('id', $id)->update(['content' => $input['content']]);
+        
+        Memo::where('id', $id)->update(['content' => $input['content'], 'tag_id' => $input['tag_id']]);
         return redirect()->route('home');
     }
 

@@ -16,6 +16,13 @@
                     <label for="tag">タグ</label>
                     <input name='tag' type="text" class="form-control" id="tag" placeholder="タグを入力">
                 </div> -->
+                <div class="form-group">
+                    <select class='form-control' name='tag_id'>
+                        @foreach($tags as $tag)
+                            <option value="{{ $tag['id'] }}" {{ $tag['id'] == $memo['tag_id'] ? "selected" : "" }}>{{$tag['name']}}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <button type='submit' class="btn btn-primary btn-lg">更新</button>
             </form>
         </div>
