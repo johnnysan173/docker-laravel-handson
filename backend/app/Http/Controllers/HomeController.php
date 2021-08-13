@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Memo;
 
 class HomeController extends Controller
 {
@@ -25,4 +26,31 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    public function create()
+    {
+        $user = \Auth::user();
+        return view('create', compact('user'));
+    }
+    public function store(Request $request)
+    {
+        $data = $request->all();
+        // dd($data);
+        // POSTされたデータをDB（memosテーブル）に挿入
+        // MEMOモデルにDBへ保存する命令を出す
+
+        //タグのIDが判明する
+        // タグIDをmemosテーブルに入れてあげる
+        $memo_id = Memo::insertGetId([
+            'content' => $data['content'],
+             'user_id' => $data['user_id'], 
+            //  'tag_id' => $tag_id,
+             'status' => 1
+        ]);
+        
+        // リダイレクト処理
+        return redirect()->route('home');
+    }
+
+
 }
