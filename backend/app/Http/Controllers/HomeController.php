@@ -87,5 +87,13 @@ class HomeController extends Controller
         return redirect()->route('home');
     }
 
+    public function delete(Request $request, $id){
+        $input = $request->all();
+        // dd($input);
+        
+        Memo::where('id', $id)->update(['status' => 2]);
+        return redirect()->route('home')->with('success', 'メモの削除完了');
+    }
+
 
 }
