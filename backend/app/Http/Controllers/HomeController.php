@@ -26,18 +26,20 @@ class HomeController extends Controller
      */
     public function index()
     {   
-        $user = \Auth::user();
-        $memos = Memo::where('user_id', $user['id'])->where('status', 1)->orderBy('updated_at', 'DESC')->get();
+        // $user = \Auth::user();
+        // $memos = Memo::where('user_id', $user['id'])->where('status', 1)->orderBy('updated_at', 'DESC')->get();
         // dd($memos);
-        return view('home', compact('user', 'memos'));
+        // return view('create', compact('user', 'memos'));
+        return view('create');
     }
 
     public function create()
     {
-        $user = \Auth::user();
+        // $user = \Auth::user();
         // dd($user);
-        $memos = Memo::where('user_id', $user['id'])->where('status', 1)->orderBy('updated_at', 'DESC')->get();
-        return view('create', compact('user', 'memos'));
+        // $memos = Memo::where('user_id', $user['id'])->where('status', 1)->orderBy('updated_at', 'DESC')->get();
+        // return view('create', compact('user', 'memos'));
+        return view('create');
     }
 
     public function store(Request $request)
@@ -70,13 +72,13 @@ class HomeController extends Controller
     public function edit($id){
         // 該当するIDのメモをデータベースから取得
         $user = \Auth::user();
-        $memos = Memo::where('user_id', $user['id'])->where('status', 1)->orderBy('updated_at', 'DESC')->get();
-        $memo = Memo::where('status', 1)->where('id', $id)->where('user_id', $user['id'])
-          ->first();
-        $tags = tag::where('user_id', $user['id'])->get();
+        // $memos = Memo::where('user_id', $user['id'])->where('status', 1)->orderBy('updated_at', 'DESC')->get();
+        $memo = Memo::where('status', 1)->where('id', $id)->where('user_id', $user['id'])->first();
+        // $tags = tag::where('user_id', $user['id'])->get();
         // dd($tags);
         //取得したメモをViewに渡す
-        return view('edit',compact('user', 'memo', 'memos', 'tags'));
+        // return view('edit',compact('user', 'memo', 'memos', 'tags'));
+        return view('edit',compact('memo'));
     }
 
     public function update(Request $request, $id){
